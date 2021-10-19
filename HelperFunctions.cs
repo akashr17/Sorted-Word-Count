@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Linq;
+using System.Diagnostics;
 
 
 namespace Lab3Q1
@@ -18,10 +19,25 @@ namespace Lab3Q1
         {
             // YOUR IMPLEMENTATION HERE
 
+            int count = 0;
+            int length = line.Length;
+            Stopwatch stopWatch = new Stopwatch();
+            Stopwatch stopWatch1 = new Stopwatch();
+            // Check the time taken to run the Merge Sort for single thread
+            stopWatch.Start();
+            
+            for (int i=start_idx;i<length;i++)
+            {
+                if (line[i] == (' '))
+                {
+                    count++;
+                }
+                
+            }
+            count++;
+           
             return count;
 
-
-          }
         }
 
 
@@ -131,8 +147,8 @@ namespace Lab3Q1
         public static List<Tuple<int, string>> SortCharactersByWordcount(Dictionary<string, int> wordcount)
         {
 
-          // Implement sorting by word count here
-
+            // Implement sorting by word count here
+            List<Tuple<int, string>> sortedByValueList = new List<Tuple<int, string>>();
             return sortedByValueList;
 
         }

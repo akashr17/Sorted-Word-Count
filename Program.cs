@@ -27,11 +27,11 @@ namespace Lab3Q1
                 "../../data/shakespeare_romeo_and_juliet.txt",
            };
 
-           //=============================================================
-           // YOUR IMPLEMENTATION HERE TO COUNT WORDS IN SINGLE THREAD
-           //=============================================================
-
-
+            //=============================================================
+            // YOUR IMPLEMENTATION HERE TO COUNT WORDS IN SINGLE THREAD
+            //=============================================================
+            string tester = "Hello person dog";
+            int count = HelperFunctions.WordCount(ref tester, 0);
 
 
            Console.WriteLine( "SingleThread is Done!");
@@ -43,7 +43,7 @@ namespace Lab3Q1
 
 
            Console.WriteLine( "MultiThread is Done!");
-           return 0;
+           return;
         }
     }
 }
