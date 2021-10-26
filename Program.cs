@@ -9,12 +9,12 @@ namespace Lab3Q1
     {
         static void Main(string[] args)
         {
-          // map and mutex for thread safety
-          Mutex mutex = new Mutex();
-          Dictionary<string, int> wcountsSingleThread = new Dictionary<string, int>();
+            // map and mutex for thread safety
+            Mutex mutex = new Mutex();
+            Dictionary<string, int> wcountsSingleThread = new Dictionary<string, int>();
+            
 
-
-          var filenames = new List<string> {
+            var filenames = new List<string> {
                 "../../data/shakespeare_antony_cleopatra.txt",
                 "../../data/shakespeare_hamlet.txt",
                 "../../data/shakespeare_julius_caesar.txt",
@@ -25,24 +25,31 @@ namespace Lab3Q1
                 "../../data/shakespeare_much_ado.txt",
                 "../../data/shakespeare_othello.txt",
                 "../../data/shakespeare_romeo_and_juliet.txt",
-           };
+            };
+
+            wcountsSingleThread.Add("Rob", 10);
+            wcountsSingleThread.Add("Bob", 12);
+            wcountsSingleThread.Add("Tob", 16);
+            List<Tuple<int, string>> sortedByValueList = HelperFunctions.SortCharactersByWordcount(wcountsSingleThread);
 
             //=============================================================
             // YOUR IMPLEMENTATION HERE TO COUNT WORDS IN SINGLE THREAD
             //=============================================================
-            string tester = "Hello person dog";
-            int count = HelperFunctions.WordCount(ref tester, 0);
+            string tester = "Hello ";
+            int count = HelperFunctions.WordCount(ref tester, 10);
+            Console.WriteLine(count);
+
+            Console.WriteLine( "SingleThread is  Done!");
+            //=============================================================
+            // YOUR IMPLEMENTATION HERE TO COUNT WORDS IN MULTIPLE THREADS
+            //=============================================================
 
 
-           Console.WriteLine( "SingleThread is Done!");
-           //=============================================================
-           // YOUR IMPLEMENTATION HERE TO COUNT WORDS IN MULTIPLE THREADS
-           //=============================================================
 
 
-
-
-           Console.WriteLine( "MultiThread is Done!");
+            Console.WriteLine( "MultiThread is Done!");
+            Console.WriteLine("Hit Enter to end:");
+            Console.ReadLine();
            return;
         }
     }

@@ -18,26 +18,39 @@ namespace Lab3Q1
         public static int WordCount(ref string line, int start_idx)
         {
             // YOUR IMPLEMENTATION HERE
-
             int count = 0;
-            int length = line.Length;
-            Stopwatch stopWatch = new Stopwatch();
-            Stopwatch stopWatch1 = new Stopwatch();
-            // Check the time taken to run the Merge Sort for single thread
-            stopWatch.Start();
-            
-            for (int i=start_idx;i<length;i++)
+            try
             {
-                if (line[i] == (' '))
+                if (start_idx > line.Length)
                 {
-                    count++;
+                    throw new Exception("Starting index out of range of line");
                 }
+
                 
+
+                string testing_line = line.Substring(start_idx);
+                string[] words = testing_line.Split(' ');
+                count = words.Length;
+                for (int i = 0; i < words.Length; i++)
+                {
+                    if (words[i] == "")
+                    {
+                        count--;
+                    }
+                    // add in punctuation counter
+                }
             }
-            count++;
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
+
+            
+        
            
             return count;
 
+          
         }
 
 
@@ -57,26 +70,46 @@ namespace Lab3Q1
             //  IMPLEMENT THIS METHOD INCLUDING THREAD SAFETY
             //===============================================
 
-             string line;  // for storing each line read from the file
-             string character = "";  // empty character to start
-             System.IO.StreamReader file = new System.IO.StreamReader(filename);
+            string line;  // for storing each line read from the file
+            string character = "";  // empty character to start
+            System.IO.StreamReader file = new System.IO.StreamReader(filename);
 
-             while ((line = file.ReadLine()) != null)
-             {
-               //=================================================
-               // YOUR JOB TO ADD WORD COUNT INFORMATION TO MAP
-               //=================================================
+            while ((line = file.ReadLine()) != null)
+            {
+            //=================================================
+            // YOUR JOB TO ADD WORD COUNT INFORMATION TO MAP
+            //=================================================
+                int startingIdx = IsDialogueLine(line, ref character);
+                    if (startingIdx!=-1)
+                    {
+                        if((startingIdx > 0) && (character != ""))
+                        {
+                            int wordcount = WordCount(ref line, startingIdx);
 
-                 // Is the line a dialogueLine?
-                 //    If yes, get the index and the character name.
-                 //      if index > 0 and character not empty
-                 //        get the word counts
-                 //          if the key exists, update the word counts
-                 //          else add a new key-value to the dictionary
-                 //    reset the character
+                            if(wcounts.ContainsKey(character))
+                            {
+                                wcounts[character] += wordcount;
+                            }
+                            else
+                            {
+                                wcounts.Add(character, wordcount);
+                            }
+                        }
 
-               }
-               // Close the file
+                        character = "";
+                    }
+                    // Is the line a dialogueLine?
+                    //    If yes, get the index and the character name.
+                    //      if index > 0 and character not empty
+                    //        get the word counts
+                    //          if the key exists, update the word counts
+                    //          else add a new key-value to the dictionary
+                    //    reset the character
+
+            }
+            file.Close();
+
+                // Close the file
         }
 
 
@@ -149,6 +182,13 @@ namespace Lab3Q1
 
             // Implement sorting by word count here
             List<Tuple<int, string>> sortedByValueList = new List<Tuple<int, string>>();
+            
+            foreach (KeyValuePair<string, int> character in wordcount.OrderByDescending(key => key.Value))
+            {
+                sortedByValueList.Add(new Tuple<int, string>(character.Value, character.Key));
+            }
+             
+            
             return sortedByValueList;
 
         }
@@ -162,7 +202,11 @@ namespace Lab3Q1
          */
         public static void PrintListofTuples(List<Tuple<int, string>> sortedList)
         {
-
+            foreach(Tuple<int,string> item in sortedList)
+            {
+                Console.WriteLine("Words = {0}, Character = {1}", item.Item1, item.Item2);
+                
+            }
           // Implement printing here
 
         }
