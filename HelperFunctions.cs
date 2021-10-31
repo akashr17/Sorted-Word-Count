@@ -26,7 +26,7 @@ namespace Lab3Q1
                     throw new Exception("Starting index out of range of line");
                 }
 
-                
+
 
                 string testing_line = line.Substring(start_idx);
                 string[] words = testing_line.Split(' ');
@@ -45,12 +45,12 @@ namespace Lab3Q1
                 Console.WriteLine(e);
             }
 
-            
-        
-           
+
+
+
             return count;
 
-          
+
         }
 
 
@@ -72,44 +72,51 @@ namespace Lab3Q1
 
             string line;  // for storing each line read from the file
             string character = "";  // empty character to start
+
             System.IO.StreamReader file = new System.IO.StreamReader(filename);
 
             while ((line = file.ReadLine()) != null)
             {
-            //=================================================
-            // YOUR JOB TO ADD WORD COUNT INFORMATION TO MAP
-            //=================================================
-                int startingIdx = IsDialogueLine(line, ref character);
-                    if (startingIdx!=-1)
-                    {
-                        if((startingIdx > 0) && (character != ""))
-                        {
-                            int wordcount = WordCount(ref line, startingIdx);
+                //=================================================
+                // YOUR JOB TO ADD WORD COUNT INFORMATION TO MAP
+                //=================================================
 
-                            if(wcounts.ContainsKey(character))
-                            {
-                                wcounts[character] += wordcount;
-                            }
-                            else
-                            {
-                                wcounts.Add(character, wordcount);
-                            }
+                int startingIdx = IsDialogueLine(line, ref character);
+                if (startingIdx != -1)
+                {
+                    mutex.WaitOne();
+                    if ((startingIdx > 0) && (character != ""))
+                    {
+
+                        int wordcount = WordCount(ref line, startingIdx);
+
+                        if (wcounts.ContainsKey(character))
+                        {
+                            wcounts[character] += wordcount;
+                        }
+                        else
+                        {
+                            wcounts.Add(character, wordcount);
                         }
 
-                        character = "";
                     }
-                    // Is the line a dialogueLine?
-                    //    If yes, get the index and the character name.
-                    //      if index > 0 and character not empty
-                    //        get the word counts
-                    //          if the key exists, update the word counts
-                    //          else add a new key-value to the dictionary
-                    //    reset the character
+                    mutex.ReleaseMutex();
+
+                }
+
+                // Is the line a dialogueLine?
+                //    If yes, get the index and the character name.
+                //      if index > 0 and character not empty
+                //        get the word counts
+                //          if the key exists, update the word counts
+                //          else add a new key-value to the dictionary
+                //    reset the character
 
             }
+
             file.Close();
 
-                // Close the file
+            // Close the file
         }
 
 
@@ -182,13 +189,13 @@ namespace Lab3Q1
 
             // Implement sorting by word count here
             List<Tuple<int, string>> sortedByValueList = new List<Tuple<int, string>>();
-            
+
             foreach (KeyValuePair<string, int> character in wordcount.OrderByDescending(key => key.Value))
             {
                 sortedByValueList.Add(new Tuple<int, string>(character.Value, character.Key));
             }
-             
-            
+
+
             return sortedByValueList;
 
         }
@@ -202,13 +209,38 @@ namespace Lab3Q1
          */
         public static void PrintListofTuples(List<Tuple<int, string>> sortedList)
         {
-            foreach(Tuple<int,string> item in sortedList)
+            foreach (Tuple<int, string> item in sortedList)
             {
                 Console.WriteLine("Words = {0}, Character = {1}", item.Item1, item.Item2);
-                
-            }
-          // Implement printing here
 
+            }
+            // Implement printing here
+
+        }
+        public static List<Tuple<int,string>> checkResuls(List<Tuple<int, string>> singleList, List<Tuple<int, string>> multiList)
+        {
+            List<Tuple<int, string>> mistakes = new List<Tuple<int,string>>();
+            /*for (int i = 0; i < singleList.Count; i++)
+            {
+                if ((singleList[i].Item1 != multiList[i].Item1) || (singleList[i].Item2 != multiList[i].Item2))
+                {
+                    mistakes.Add(singleList[i].Item1);
+                }
+            }*/
+            bool exists;
+            foreach (var item in singleList)
+            {
+
+                //  mistakes.Add(multiList.Find( found => singleList.Contains(item)));
+                exists = (multiList.Exists(x => x.Item1 == item.Item1) && multiList.Exists(x => x.Item2 == item.Item2));
+
+                if (!exists)
+                {
+                    mistakes.Add(item);
+                }
+
+            }
+            return mistakes;
         }
     }
 }
