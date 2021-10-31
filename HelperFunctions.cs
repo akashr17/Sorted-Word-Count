@@ -21,14 +21,20 @@ namespace Lab3Q1
             int count = 0;
             try
             {
+                // throw exceptions for starting index errors
                 if (start_idx > line.Length)
                 {
                     throw new Exception("Starting index out of range of line");
                 }
+                if (start_idx < 0)
+                {
+                    throw new Exception("Starting index is negative");
+                }
 
-
-
+                // create the testing string by substringing based on the index
                 string testing_line = line.Substring(start_idx);
+
+                // split the string based on spaces and count the number of words - the spaces
                 string[] words = testing_line.Split(' ');
                 count = words.Length;
                 for (int i = 0; i < words.Length; i++)
@@ -37,7 +43,7 @@ namespace Lab3Q1
                     {
                         count--;
                     }
-                    // add in punctuation counter
+                    
                 }
             }
             catch (Exception e)
@@ -45,11 +51,7 @@ namespace Lab3Q1
                 Console.WriteLine(e);
             }
 
-
-
-
             return count;
-
 
         }
 
@@ -81,10 +83,15 @@ namespace Lab3Q1
                 // YOUR JOB TO ADD WORD COUNT INFORMATION TO MAP
                 //=================================================
 
+                // check if dialogue line and check the starting index
                 int startingIdx = IsDialogueLine(line, ref character);
                 if (startingIdx != -1)
                 {
+                    // Add in the mutex wait to begin blocking the additition to Dictionary section
                     mutex.WaitOne();
+
+                    // based on starting index and character, check wordcount and if dict countains a character,
+                    // increase the wordcount otherwise create new character and add
                     if ((startingIdx > 0) && (character != ""))
                     {
 
@@ -98,8 +105,8 @@ namespace Lab3Q1
                         {
                             wcounts.Add(character, wordcount);
                         }
-
                     }
+                    // release the mutex since we are done handling data sensitive section
                     mutex.ReleaseMutex();
 
                 }
@@ -190,14 +197,12 @@ namespace Lab3Q1
             // Implement sorting by word count here
             List<Tuple<int, string>> sortedByValueList = new List<Tuple<int, string>>();
 
+            // for each character in the dictionary(which is ordered by descending", add to the list
             foreach (KeyValuePair<string, int> character in wordcount.OrderByDescending(key => key.Value))
             {
                 sortedByValueList.Add(new Tuple<int, string>(character.Value, character.Key));
             }
-
-
             return sortedByValueList;
-
         }
 
 
@@ -217,23 +222,19 @@ namespace Lab3Q1
             // Implement printing here
 
         }
+
+        // Created new method for checking the single thread and multi thread lists
         public static List<Tuple<int,string>> checkResuls(List<Tuple<int, string>> singleList, List<Tuple<int, string>> multiList)
         {
             List<Tuple<int, string>> mistakes = new List<Tuple<int,string>>();
-            /*for (int i = 0; i < singleList.Count; i++)
-            {
-                if ((singleList[i].Item1 != multiList[i].Item1) || (singleList[i].Item2 != multiList[i].Item2))
-                {
-                    mistakes.Add(singleList[i].Item1);
-                }
-            }*/
             bool exists;
+
+            // for the items in the single list, check if it exists in the multi list 
             foreach (var item in singleList)
             {
-
-                //  mistakes.Add(multiList.Find( found => singleList.Contains(item)));
                 exists = (multiList.Exists(x => x.Item1 == item.Item1) && multiList.Exists(x => x.Item2 == item.Item2));
 
+                // if it doesnt exist in the second list add to the mistakes list
                 if (!exists)
                 {
                     mistakes.Add(item);

@@ -8,25 +8,21 @@ namespace Lab3Q1
         {
             try
             {
-
-
                 //=================================================
                 // Implement your tests here. Check all the edge case scenarios.
                 // Create a large list which iterates over WCTester
                 //=================================================
-                string[] test_lines = { "Simple test", "test double  spaces", "test word that ends with.", "  this has extra starting space", " extra end space  ", "index starts 1", "" };
-                int[] expected_list = { 2, 3, 5, 5, 3, 3, 0 };
-                for (int i =0; i < test_lines.Length; i++)
+
+                // list of tests which includes just a simple test, tests with double spaces at the beginning/middle/end,
+                // tests which start at index 1, index longer than string length, negative index, index after first word, and index at last word
+                string[] test_lines = { "Simple test", "test double  spaces", "  this has extra starting space", " extra end space  ", "index starts 1", "", "index longer than string", "index skips first word", "index at end word", "index negative" };
+                int[] expected_list = { 2, 3, 5, 3, 3, 0, 0, 3, 1, 0};
+                int[] index = { 0, 0, 0, 0, 1, 0, 25, 5, 15 , -1};
+
+                // loop through the tests
+                for (int i=0; i < test_lines.Length; i++)
                 {
-                    string line = test_lines[i];
-                    int expectedResults = expected_list[i];
-                    int startIdx = 0;
-                    if (i > 4)
-                    {
-                        startIdx = 1;
-                    }
-                    
-                    WCTester(line, startIdx, expectedResults);
+                    WCTester(test_lines[i], index[i], expected_list[i]);
                 }
                      
 
@@ -35,6 +31,7 @@ namespace Lab3Q1
             {
                 Console.WriteLine(e);
             }
+            Console.WriteLine("Ran through all of the tests");
             Console.WriteLine("Hit Enter to end:");
             Console.ReadLine();
             return 0;
