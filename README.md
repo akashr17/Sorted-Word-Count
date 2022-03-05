@@ -8,13 +8,6 @@ categories: [labs, threads, multithread, shakespeare, testing]
 ---
 #### Name: Akashdeep Randhawa  
 #### Github: akashr17  
-## Discussion Questions:  
-#### Q1:  
-I can test my program by creating a test file which contains the various types of lines from the play. For example, the double space and 4 spaces for the character names and dialogue lines. Through this controlled test you can go off the assumption that it would work for the larger file too.  
-#### Q2:  
-For this particulate lab, where our program only ran through 10 files, multi-threading was slower by almost a factor of 2, with the speed factor being around 0.5. This may be due to the fact that it is a very simple program which doesn't have to parse too large of objects. It would be helpful and more efficient if we were parsing large files and had to do work through a longer program such as we had in lab2. Or in the case of lab 1, if the program requires splits, creating new threads for the splits coule be faster.  
-#### Q3:  
-In the case of having same names, typically if characters have the same names, they would not be in the same part of the play. So we can differentiate depending on who the character is interacting with. So the knowledge of which other characters are interacting with the dupilcate name character can help us differentiate.
 
 # Lab 3 -- Testing and Mutexes
 
